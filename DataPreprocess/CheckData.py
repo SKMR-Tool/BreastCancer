@@ -161,7 +161,7 @@ def StatisticalSpacing():
 def LoadData(type_list):
     ''' ESER_1.nii.gz, ADC_Reg.nii.gz, t2_W_Reg.nii.gz.....roi3D.nii '''
 
-    data_folder = r'V:\jzhang\breastFormatNew'
+    data_folder = r'\\mega\\homesall\jzhang\breastFormatNew'
 
     for case in os.listdir(data_folder):
         case_folder = os.path.join(data_folder, case)
@@ -216,34 +216,54 @@ def TestCrop():
 def CropData3D():
     from MeDIT.ArrayProcess import ExtractBlock
     from MeDIT.Normalize import NormalizeZ
-    os.mkdir(r'V:\yhzhang\BreastNpyCorrect\Einitial')
-    os.mkdir(r'V:\yhzhang\BreastNpyCorrect\DWIb2000')
-    os.mkdir(r'V:\yhzhang\BreastNpyCorrect\DWIb1000')
-    os.mkdir(r'V:\yhzhang\BreastNpyCorrect\T1WI_pos')
-    for case, image_list, data_list in LoadData(['e_initial_1.nii.gz', 'dwi_b2000_Reg.nii', 'dwi_b1000_Reg.nii', 't1_post_reset.nii.gz', 'roi3D.nii']):
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\dwi_b50')
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\e_peak_1')
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\msi_1')
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\sep_1')
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\si_slope_1')
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\t1_peak_reset')
+    os.mkdir(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\t1_pre_reset')
+    for case, image_list, data_list in LoadData(['dwi_b50_Reg.nii.gz', 'e_peak_1.nii.gz', 'msi_1.nii.gz',
+                                                 'sep_1.nii.gz', 'si_slope_1.nii.gz',
+                                                 't1_peak_reset.nii.gz', 't1_pre_reset.nii.gz',
+                                                 'roi3D.nii']):
         print(case)
-        Einitial = data_list[0]
-        DWIb2000 = data_list[1]
-        DWIb1000 = data_list[2]
-        T1WI_pos = data_list[3]
-        roi = data_list[4]
+        dwi_b50 = data_list[0]
+        e_peak_1 = data_list[1]
+        msi_1 = data_list[2]
+        sep_1 = data_list[3]
+        si_slope_1 = data_list[0]
+        t1_peak_reset = data_list[1]
+        t1_pre_reset = data_list[2]
+
+        roi = data_list[-1]
         x, y, z = GetCenter3D(roi)
-        crop_Einitial, _ = ExtractBlock(Einitial, (100, 100, 50), center_point=(y, x, z), is_shift=True)
-        crop_DWIb2000, _ = ExtractBlock(DWIb2000, (100, 100, 50), center_point=(y, x, z), is_shift=True)
-        crop_DWIb1000, _ = ExtractBlock(DWIb1000, (100, 100, 50), center_point=(y, x, z), is_shift=True)
-        crop_T1WI_pos, _ = ExtractBlock(T1WI_pos, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_dwi_b50, _ = ExtractBlock(dwi_b50, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_e_peak_1, _ = ExtractBlock(e_peak_1, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_msi_1, _ = ExtractBlock(msi_1, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_sep_1, _ = ExtractBlock(sep_1, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_si_slope_1, _ = ExtractBlock(si_slope_1, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_t1_peak_reset, _ = ExtractBlock(t1_peak_reset, (100, 100, 50), center_point=(y, x, z), is_shift=True)
+        crop_t1_pre_reset, _ = ExtractBlock(t1_pre_reset, (100, 100, 50), center_point=(y, x, z), is_shift=True)
 
-        crop_Einitial = crop_Einitial.transpose((2, 0, 1))
-        crop_DWIb2000 = crop_DWIb2000.transpose((2, 0, 1))
-        crop_DWIb1000 = crop_DWIb1000.transpose((2, 0, 1))
-        crop_T1WI_pos = crop_T1WI_pos.transpose((2, 0, 1))
 
-        np.save(os.path.join(r'V:\yhzhang\BreastNpyCorrect\Einitial', '{}.npy'.format(case)), NormalizeZ(crop_Einitial))
-        np.save(os.path.join(r'V:\yhzhang\BreastNpyCorrect\DWIb2000', '{}.npy'.format(case)), NormalizeZ(crop_DWIb2000))
-        np.save(os.path.join(r'V:\yhzhang\BreastNpyCorrect\DWIb1000', '{}.npy'.format(case)), NormalizeZ(crop_DWIb1000))
-        np.save(os.path.join(r'V:\yhzhang\BreastNpyCorrect\T1WI_pos', '{}.npy'.format(case)), NormalizeZ(crop_T1WI_pos))
+        crop_dwi_b50 = crop_dwi_b50.transpose((2, 0, 1))
+        crop_e_peak_1 = crop_e_peak_1.transpose((2, 0, 1))
+        crop_msi_1 = crop_msi_1.transpose((2, 0, 1))
+        crop_sep_1 = crop_sep_1.transpose((2, 0, 1))
+        crop_si_slope_1 = crop_si_slope_1.transpose((2, 0, 1))
+        crop_t1_peak_reset = crop_t1_peak_reset.transpose((2, 0, 1))
+        crop_t1_pre_reset = crop_t1_pre_reset.transpose((2, 0, 1))
 
-# CropData3D()
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\dwi_b50', '{}.npy'.format(case)), NormalizeZ(crop_dwi_b50))
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\e_peak_1', '{}.npy'.format(case)), NormalizeZ(crop_e_peak_1))
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\msi_1', '{}.npy'.format(case)), NormalizeZ(crop_msi_1))
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\sep_1', '{}.npy'.format(case)), NormalizeZ(crop_sep_1))
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\si_slope_1', '{}.npy'.format(case)), NormalizeZ(crop_si_slope_1))
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\t1_peak_reset', '{}.npy'.format(case)), NormalizeZ(crop_t1_peak_reset))
+        np.save(os.path.join(r'\\mega\\homesall\jzhang\BreastProject\BreastNpyCorrect\t1_pre_reset', '{}.npy'.format(case)), NormalizeZ(crop_t1_pre_reset))
+
+CropData3D()
 
 
 # from MeDIT.Visualization import FlattenImages
